@@ -13,18 +13,23 @@
 
 char	*ft_strdup(char *src)
 {
-	int		size;
 	int		i;
 	char	*ptr;
 
-	size = 0;
+	if (!src)
+	{
+		return (NULL);
+	}
 	i = 0;
 	while (src[i] != '\0')
-	{
-		size += 1;
 		i += 1;
+	if (i == 0)
+	{
+		ptr = malloc(sizeof(char) * 1);
+		ptr[0] = '\0';
+		return (ptr);
 	}
-	ptr = (char *)malloc(sizeof(char) * size);
+	ptr = (char *)malloc(sizeof(char) * i);
 	i = 0;
 	while (src[i] != '\0')
 	{
@@ -34,3 +39,8 @@ char	*ft_strdup(char *src)
 	ptr[i] = '\0';
 	return (ptr);
 }
+/*int main() {
+  char *str = ft_strdup("");
+
+  printf("%s", str);
+}*/

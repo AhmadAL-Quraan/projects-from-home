@@ -13,41 +13,72 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	total_size(int size, char **strs, int sizeSep)
+int	total_size(char **strs, int size, int sizeSep)
 {
 	int	total_size;
 	int	i;
 	int	j;
+	int	cnt;
 
-	i = 0;
-	j = 0;
 	total_size = 0;
+	i = 0;
 	while (i != size)
 	{
+		j = 0;
+		cnt = 0;
 		while (strs[i][j])
 		{
-			total_size += 1;
+			cnt += 1;
 			j += 1;
 		}
+		total_size += cnt;
 		total_size += sizeSep;
-		j = 0;
 		i += 1;
 	}
 	total_size -= sizeSep;
 	return (total_size);
 }
 
-void	save_in_array(char *ret, char sizeSep, int size, char **strs, char *sep)
+int	length(char *str)
+{
+	int	size;
+	int	i;
+
+	size = 0;
+	i = 0;
+	while (str[i])
+	{
+		size += 1;
+		i += 1;
+	}
+	return (size);
+}
+
+void	increase_sep(char *ret, int *idx, char *sep)
+{
+	int	j;
+
+	j = 0;
+	while (sep[j])
+	{
+		ret[*idx] = sep[j];
+		*idx += 1;
+		j += 1;
+	}
+}
+
+void	solve(char **strs, int size, char *sep, char *ret)
 {
 	int	i;
-	int	j;
 	int	idx;
+	int	j;
 
 	i = 0;
-	j = 0;
 	idx = 0;
+	j = 0;
 	while (i != size)
 	{
+		j = 0;
 		while (strs[i][j])
 		{
 			ret[idx] = strs[i][j];
@@ -56,51 +87,48 @@ void	save_in_array(char *ret, char sizeSep, int size, char **strs, char *sep)
 		}
 		j = 0;
 		if (i != size - 1)
-		{
-			while (j != sizeSep)
-			{
-				ret[idx] = sep[j];
-				idx += 1;
-				j += 1;
-			}
-		}
-		j = 0;
+			increase_sep(ret, &idx, sep);
 		i += 1;
 	}
+	ret[idx] = '\0';
 }
 
 char	*ft_strjoin(int size, char **strs, char *sep)
 {
-	int		sizeSep;
-	int		i;
 	int		total_sizee;
 	char	*ret;
 
+	if (!strs || !sep)
+	{
+		return (NULL);
+	}
 	if (size == 0)
 	{
 		ret = (char *)malloc(1);
 		*ret = '\0';
 		return (ret);
 	}
-	sizeSep = 0;
-	i = -1;
-	while (sep[++i])
-		sizeSep += 1;
-	total_sizee = total_size(size, strs, sizeSep);
-	ret = (char *)malloc(sizeof(char) * total_sizee);
-	save_in_array(ret, sizeSep, size, strs, sep);
+	total_sizee = total_size(strs, size, length(sep));
+	ret = (char *)malloc(sizeof(char) * total_sizee + 1);
+	solve(strs, size, sep, ret);
 	return (ret);
 }
-// // main for testing
-// int main() {
-//   char *arr1 = "hello";
-//   char *arr2 = "hi";
-//   char *arr3 = "welcome";
+// main for testing
+// int	main(void)
+// {
+// 	char	*arr1;
+// 	char	*arr2;
+// 	char	*arr3;
+// 	char	**str;
+// 	char	*sep;
 //
-//   char **str = malloc(3 * sizeof(char *));
-//   str[0] = arr1;
-//   str[1] = arr2;
-//   str[2] = arr3;
-//   char *sep = ", ";
-//   printf("%s", ft_strjoin(0, str, sep));
+// 	arr1 = "kMRjMcIFLpuchHsXAPmEmpCA";
+// 	arr2 = "hi";
+// 	arr3 = "welcome";
+// 	str = malloc(1 * sizeof(char *));
+// 	str[0] = arr1;
+// 	str[1] = arr2;
+// 	str[2] = arr3;
+// 	sep = "coACpPBnFmccqqpH";
+// 	printf("%s", ft_strjoin(1, str, sep));
 // }
